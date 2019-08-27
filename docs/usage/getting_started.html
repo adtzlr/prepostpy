@@ -118,17 +118,11 @@
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
 <dl class="docutils">
 <dt>The following example demonstrates the basic features of PrePostPy. The workflow is as follows:</dt>
-<dd><ul class="first simple">
+<dd><ul class="first last simple">
 <li>Initiate an instance of a file object</li>
 <li>add (offline-) objects e.g. Points, Curves, Nodes, Elements, Boundaries, Loadcases, Jobs</li>
 <li>within an active connection to Mentat send all these objects to Mentat and</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li>send (online-) commands to Mentat e.g. Automesh, Sweep, Select</li>
-</ul>
-</div></blockquote>
-<ul class="last simple">
 <li>submit a specified Job either through Mentat or directly to Marc</li>
 <li>postprocess the postfile with HistoryPlots of nodal and elemental quantities at Nodes</li>
 </ul>
@@ -443,6 +437,160 @@
 <div class="figure align-center" id="id11">
 <a class="reference internal image-reference" href="../_images/DisplacementX-N2_ReactionForceX-N1.png"><img alt="Force-Displacement Curve in x-Direction" src="../_images/DisplacementX-N2_ReactionForceX-N1.png" style="width: 50%;" /></a>
 <p class="caption"><span class="caption-text">Force-Displacement Curve in x-Direction</span></p>
+</div>
+</div>
+<div class="section" id="full-code-listing">
+<h2>Full Code Listing<a class="headerlink" href="#full-code-listing" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prepostpy</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># init file</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\temp\model_101.mud&#39;</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+<span class="c1"># create Nodes</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.01</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;n_bottom&#39;</span> <span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;n_top&#39;</span><span class="p">)</span>
+
+<span class="c1"># create Points</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># create Curves</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Arc Cen/Pnt/Pnt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span>
+                                         <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">,</span>
+                                         <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># create Tables</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Table_1&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Table_2&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+<span class="c1"># add single points to T1</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># create Points as 2D-Array for T2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+
+<span class="c1"># add Boundaries (Fixed Displacement)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fixed_bottom&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Fixed Displacement&#39;</span><span class="p">,</span>
+                        <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">dof_values</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;n_bottom&#39;</span><span class="p">)</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fixed_top&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Fixed Displacement&#39;</span><span class="p">,</span>
+                        <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">dof_values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;n_top&#39;</span><span class="p">,</span>
+                        <span class="n">ramp</span><span class="o">=</span><span class="s1">&#39;off&#39;</span><span class="p">,</span>
+                        <span class="n">tables</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="p">,</span>
+                                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span><span class="p">})</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="s1">&#39;Symmetry-y&#39;</span><span class="p">)</span>
+
+<span class="c1"># add Material definition for Rubber</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">M1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rubber&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Mooney&#39;</span><span class="p">,</span>
+                        <span class="c1">#elements=[],</span>
+                        <span class="n">C10</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                        <span class="c1">#alpha=1.5e-4</span>
+                        <span class="p">)</span>
+
+<span class="c1"># add second Material definition for Steel</span>
+<span class="c1"># F.item.M2 = pp.Material(label=&#39;steel&#39;,</span>
+<span class="c1">#                         category=&#39;Elastic-Plastic Isotropic&#39;,</span>
+<span class="c1">#                         E=210000,</span>
+<span class="c1">#                         nu = 0.3</span>
+<span class="c1">#                         )</span>
+
+<span class="c1"># add loadcases</span>
+<span class="n">lc_properties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;convergence_force&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="s1">&#39;convergence_displacement&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="s1">&#39;multi_criteria&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Loadcase</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;lc1&#39;</span><span class="p">,</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">lc_properties</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Loadcase</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;lc2&#39;</span><span class="p">,</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">lc_properties</span><span class="p">)</span>
+
+<span class="c1"># create job and add loadcases</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Job</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;job_sz_sx&#39;</span><span class="p">,</span>
+                   <span class="n">loadcases</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC1</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC2</span><span class="p">],</span>
+                   <span class="n">strain</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+
+<span class="n">MConn</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">MentatConnection</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span><span class="p">,</span> <span class="n">quitmentat</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">tomentat</span><span class="p">()</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Automesh</span><span class="o">.</span><span class="n">Planar</span><span class="o">.</span><span class="n">AdvancedFront</span><span class="o">.</span><span class="n">quad_mesh</span><span class="p">([</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;elements_1&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Expand</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="s1">&#39;elements_1&#39;</span><span class="p">,</span>
+                               <span class="n">translations</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>
+                               <span class="n">repetitions</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Symmetry</span><span class="o">.</span><span class="n">symmetry</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Sweep</span><span class="o">.</span><span class="n">sweep</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_zx</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="s1">&#39;all_selected&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_xy</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2_bottom&#39;</span><span class="p">,</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;all_selected&#39;</span><span class="p">])</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_xy</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2_top&#39;</span><span class="p">,</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;all_selected&#39;</span><span class="p">])</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">M1</span><span class="o">.</span><span class="n">add_elements</span><span class="p">(</span><span class="s1">&#39;all_existing&#39;</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="o">.</span><span class="n">set_element_type</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;all_existing&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">savefile</span><span class="p">()</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">PF1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">PostFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">job</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">PF1</span> <span class="k">as</span> <span class="n">PFile</span><span class="p">:</span>
+
+    <span class="n">data</span><span class="p">,</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Displacement Z&#39;</span><span class="p">,</span>
+                                        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Reaction Force Z&#39;</span><span class="p">,</span>
+                                        <span class="n">increments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.pdf&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savedata</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+
+    <span class="n">data</span><span class="p">,</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Displacement X&#39;</span><span class="p">,</span>
+                                        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Reaction Force X&#39;</span><span class="p">,</span>
+                                        <span class="n">increments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.pdf&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savedata</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
 </div>
 </div>
