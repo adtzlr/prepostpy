@@ -3,7 +3,7 @@ prepostpy
 
 High-level Scripting Interface for FEA Pre- and Postprocessing for MSC.Marc Mentat®
 
-Official Documentation: https://adtzlr.github.com/prepostpy_
+Official Documentation: https://adtzlr.github.com/prepostpy
 
 
 License
@@ -21,6 +21,3 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 
 **Additional Disclaimer**: I (the author of PrePostPy) developed PrePostPy in my own (spare) free time. This module is built on top of the python modules `py_mentat` and `py_post`, which come pre-bundled with the software package MSC.Marc Mentat®. MSC, Marc and Mentat are trademarks or registered trademarks of MSC Software Corporation or its subsidiaries in the United States and/or other countries. The author of PrePostPy has absolutely no relation to MSC Software Corporation.
-
-.. _https://adtzlr.github.com/prepostpy
-.. _LICENSE
