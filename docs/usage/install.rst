@@ -1,0 +1,40 @@
+﻿Installation
+============
+
+Link your own Python Distribution to MSC.Marc Mentat® (Windows)
+---------------------------------------------------------------
+In order to use your own Python Distribution for MSC.Marc Mentat®, make sure to download **exactly** the same version of Python as the one which comes bundled with MSC.Marc Mentat®. The Python version is denoted in the document *Marc and Mentat Release Guide*. The easiest way on Windows is to use WinPython, as it installs the whole Python distribution in a single folder without any modifications to the system. In Spyder, add the path to the modules `py_mentat` and `py_post`. Scripts started inside Spyder (shortcut F5) are now able to establish a connection to MSC.Marc Mentat®.
+
+ * Download WinPython_, unzip and install to `C:\\WinPython-64bit-3.x.x.x`
+ * open Spyder
+ * Tools - PYTHONPATH manager - add path `C:\\MSC.Software\\Marc\\20xx.x.x\\mentat20xx\\shlib\\win64`
+ * Synchronize... - No - close
+ * restart Spyder
+
+.. _ZIP-file: https://github.com/adtzlr/prepostpy/archive/master.zip
+.. _WinPython: https://sourceforge.net/projects/winpython/files/
+
+Download PrePostPy
+------------------
+
+Download this repo as ZIP-file_, unzip it and add the unzipped location to your PYTHONPATH in Spyder (same procedure as above).
+ * open Spyder
+ * Tools - PYTHONPATH manager - add path `C:\\Path\\to\\prepostpy_package`
+ * Synchronize... - No - close 
+ * restart Spyder
+ 
+Import PrePostPy
+----------------
+Create a new script in Spyder and run the following script to verify if everything is set up correctly. On the first run the connection has to be allowed in the firewall.
+
+.. code:: python
+
+    import prepostpy as pp
+
+    F = pp.File('temp.mud')
+    F.item.N1 = pp.Node([0,0,-0.01])
+
+    MConn = pp.MentatConnection(version='latest')
+
+    with MConn:
+        F.tomentat()

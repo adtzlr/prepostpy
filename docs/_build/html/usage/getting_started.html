@@ -1,0 +1,475 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Getting Started &#8212; PrePostPy 2019.09.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Installation" href="install.html" />
+    <link rel="canonical" href="http://www.sphinx-doc.org/en/master/usage/getting_started.html" />
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+      
+    </style>
+    <script type="text/javascript">
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+    <div >
+        <a href="https://github.com/adtzlr/prepostpy"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
+    </div>
+  <ul>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="install.html">Get it</a></li>
+    <li><a href="#">Quickstart</a></li>
+    <!-- <li><a href="../theory/theory.html">Theory Guide</a></li> -->
+  </ul>
+  <div>
+    <a href="../index.html">
+      <img src="../_static/sphinxheader.png" alt="TRUSSPY" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a>&#160;|</li>
+        <li><a href="#">Quickstart</a> &#187;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Installation</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>The following example demonstrates the basic features of PrePostPy. The workflow is as follows:</dt>
+<dd><ul class="first simple">
+<li>Initiate an instance of a file object</li>
+<li>add (offline-) objects e.g. Points, Curves, Nodes, Elements, Boundaries, Loadcases, Jobs</li>
+<li>within an active connection to Mentat send all these objects to Mentat and</li>
+</ul>
+<blockquote>
+<div><ul class="simple">
+<li>send (online-) commands to Mentat e.g. Automesh, Sweep, Select</li>
+</ul>
+</div></blockquote>
+<ul class="last simple">
+<li>submit a specified Job either through Mentat or directly to Marc</li>
+<li>postprocess the postfile with HistoryPlots of nodal and elemental quantities at Nodes</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="import-prepostpy">
+<h2>Import PrePostPy<a class="headerlink" href="#import-prepostpy" title="Permalink to this headline">¶</a></h2>
+<p>First we import prepostpy with it’s own namespace and create an instance of the prepostpy-file class <code class="docutils literal notranslate"><span class="pre">F</span></code>.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prepostpy</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># init file</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\temp\model_101.mud&#39;</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="points-curves-and-nodes">
+<h2>Points, Curves and Nodes<a class="headerlink" href="#points-curves-and-nodes" title="Permalink to this headline">¶</a></h2>
+<p>Now we add Nodes and Points with their respective coordinate triples and Curves with the appropriate point connectivity. These Points, Curves and Nodes may optionally be stored in a <em>Mentat-Set</em> of the corresponding type. Because the (lowercase) word <em>set</em> is reserved for built-in functions in Python we use the keyword <cite>membership</cite> instead. PrePostPy’s file class supports dot-convention: All the items are stored in a <a class="reference external" href="https://docs.python.org/3/library/types.html">SimpleNamespace</a> <cite>F.items</cite>, followed by the user-defined name of the object. In this example e.q. the first Node is named <cite>N1</cite>. Curves Divisions are defined inside the Curve definitions in order to enable planar Automeshing. These Points, Curves and Nodes are also called <cite>offline</cite>-items, as they are created without a connection to Mentat. Instead these items are stored inside the PrePostPy’s File instance and are sent to mentat in a rush. On the other hand, <cite>online</cite>-items need an active connection to Mentat, which will be discussed later.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create Nodes</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.01</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;n_bottom&#39;</span> <span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;n_top&#39;</span><span class="p">)</span>
+
+<span class="c1"># create Points</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># create Curves</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">Ratio</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Arc Cen/Pnt/Pnt&#39;</span><span class="p">,</span> <span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span>
+                                         <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">,</span>
+                                         <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">],</span> <span class="n">Divisions</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/points_curves_nodes.png"><img alt="Sketch of Points, Curves (with Divisions) and Nodes" src="../_images/points_curves_nodes.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Sketch of Points, Curves (with Divisions) and Nodes</span></p>
+</div>
+</div>
+<div class="section" id="tables">
+<h2>Tables<a class="headerlink" href="#tables" title="Permalink to this headline">¶</a></h2>
+<p>One-dimensional tables are needed to control the time-dependence of user-defined boundary conditions. Two different approaches are shown to add data points to a Table: either by the help of a 2D-array of points or by manually adding one point followed by another one.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create Tables</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Table_1&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Table</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Table_2&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+
+<span class="c1"># add single points to T1</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="o">.</span><span class="n">add_point</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="c1"># create Points as 2D-Array for T2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span><span class="o">.</span><span class="n">add_points</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/tables.png"><img alt="Sketch of Timetables" src="../_images/tables.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Sketch of Timetables</span></p>
+</div>
+</div>
+<div class="section" id="boundaries">
+<h2>Boundaries<a class="headerlink" href="#boundaries" title="Permalink to this headline">¶</a></h2>
+<p>PrePostPy supports two types of Boundary conditions:</p>
+<ul class="simple">
+<li><em>Fixed Displacement</em> and</li>
+<li><em>Point Load</em> (other types may be added in future versions).</li>
+</ul>
+<p>All Boundary conditions must contain Nodes to apply. These are submitted by the keyword <cite>nodes</cite>. The keyword <cite>dof</cite> (=Degree of Freedom) controls whether a dof is prescribed (<cite>1</cite> or <cite>True</cite>) or free (0` or <cite>False</cite>). Values for a prescribed dof are passed with the keyword <cite>dof_values</cite> as a list of values, on for each dof. With the help of the keyword <cite>ramp</cite> an automatic incrementation during the loadcase of the dof value is activated. Tables may be passed as a dictionary with keywords <cite>x</cite>, <cite>y</cite>, <cite>z</cite>, <cite>rx</cite>, <cite>ry</cite>, <cite>rz</cite>, <cite>mx</cite>, <cite>my</cite> or <cite>mz</cite>. All the mentioned functionality is demonstrated in this example. A special high-level category of Boundary condition which is not available in Mentat is <cite>Symmetry-[axis]</cite>. The axis is automatically set with <cite>x|y|z</cite> as the last character of the label.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># add Boundaries (Fixed Displacement)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fixed_bottom&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Fixed Displacement&#39;</span><span class="p">,</span>
+                        <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">dof_values</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;n_bottom&#39;</span><span class="p">)</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Fixed_top&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Fixed Displacement&#39;</span><span class="p">,</span>
+                        <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                        <span class="n">dof_values</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">nodes</span><span class="o">=</span><span class="s1">&#39;n_top&#39;</span><span class="p">,</span>
+                        <span class="n">ramp</span><span class="o">=</span><span class="s1">&#39;off&#39;</span><span class="p">,</span>
+                        <span class="n">tables</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T1</span><span class="p">,</span>
+                                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">T2</span><span class="p">})</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Boundary</span><span class="p">(</span><span class="s1">&#39;Symmetry-y&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="material-properties">
+<h2>Material Properties<a class="headerlink" href="#material-properties" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>Material definition in PrePostPy is available for the following category of materials:</dt>
+<dd><ul class="first last simple">
+<li>Elastic-Plastic Isotropic</li>
+<li>Mooney</li>
+</ul>
+</dd>
+</dl>
+<p>The elements to be applied are left empty in this example, as they do not exist before the elements are generated by automeshing. Instead this assignment will be performed during the active Mentat-Connection. For demonstration purpose a second material definition is shown but not used in this example.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># add Material definition for Rubber</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">M1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Material</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;rubber&#39;</span><span class="p">,</span>
+                        <span class="n">category</span><span class="o">=</span><span class="s1">&#39;Mooney&#39;</span><span class="p">,</span>
+                        <span class="c1">#elements=[],</span>
+                        <span class="n">C10</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                        <span class="c1">#alpha=1.5e-4</span>
+                        <span class="p">)</span>
+
+<span class="c1"># add second Material definition for Steel</span>
+<span class="c1"># F.item.M2 = pp.Material(label=&#39;steel&#39;,</span>
+<span class="c1">#                         category=&#39;Elastic-Plastic Isotropic&#39;,</span>
+<span class="c1">#                         E=210000,</span>
+<span class="c1">#                         nu = 0.3</span>
+<span class="c1">#                         )</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="loadcase-and-job">
+<h2>Loadcase and Job<a class="headerlink" href="#loadcase-and-job" title="Permalink to this headline">¶</a></h2>
+<p>Finally the boundary conditions are added to Loadcases. Only a limited number of Loadcase and Job properties are available through PrePostPy. Regarding the Loadcase these include the selection of active Boundary conditions, the number of steps, the loadcase time, the activation of Multi Criteria time stepping and the definition of relative convergence criteria. For the Job this even more basic: Loadcases are passed as a list - other options include the selection of the <em>strain-mode</em> (<em>small</em> or <em>large</em>).</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># add loadcases</span>
+<span class="n">lc_properties</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;convergence_force&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                 <span class="s1">&#39;convergence_displacement&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="s1">&#39;multi_criteria&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Loadcase</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;lc1&#39;</span><span class="p">,</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">lc_properties</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Loadcase</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;lc2&#39;</span><span class="p">,</span><span class="n">steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">time</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">boundaries</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B2</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="p">],</span>
+                         <span class="o">**</span><span class="n">lc_properties</span><span class="p">)</span>
+
+<span class="c1"># create job and add loadcases</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Job</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;job_sz_sx&#39;</span><span class="p">,</span>
+                   <span class="n">loadcases</span><span class="o">=</span><span class="p">[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC1</span><span class="p">,</span> <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">LC2</span><span class="p">],</span>
+                   <span class="n">strain</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/job.png"><img alt="Sketch of Job structure and options" src="../_images/job.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Sketch of Job structure and options</span></p>
+</div>
+</div>
+<div class="section" id="mentat-connection">
+<h2>Mentat-Connection<a class="headerlink" href="#mentat-connection" title="Permalink to this headline">¶</a></h2>
+<p>A connection to Mentat is established either by automatically starting a new Mentat window along with a procedure to initiate the Python socket connection (default) or by a connection to an already open Socket connection of Mentat. This is controlled with the boolean flag <cite>startmentat</cite>. Unfortunately it is not possible to open Mentat in the background through PrePostPy. There are several other options which could be helpful: It is possible to kill <em>all</em> instances of Mentat (Caution!) before calling Mentat from PrePostPy with <cite>killmentat=True</cite> or to quit Mentat after the connection to it is closed by setting <cite>quitmentat=True</cite>. Optionally the socket connection may be left open for further operations in the same Mentat window with <cite>disconnect=False</cite>. If several versions of Mentat are installed, PrePostPy selects the latest version by default - a custom version can be specified with the keyword <cite>version</cite>. <strong>With</strong> this instance of a Mentat-Connection (look for the <em>with</em> statement in the code) all previous items are rearranged and sent to Mentat. As the following code-blocks are splitted we choose Mentat not to quit after the <cite>with</cite> block and leave the socket connection enabled (<cite>disconnect=False</cite>). Normally all the following commands would be written inside one big <cite>with</cite>-statement (see full code listing at the end of this site).</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MConn</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">MentatConnection</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s1">&#39;latest&#39;</span><span class="p">,</span>
+                            <span class="n">quitmentat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">disconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">tomentat</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/fig_tomentat.png"><img alt="The model with all items sent to Mentat" src="../_images/fig_tomentat.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">The model with all items sent to Mentat</span></p>
+</div>
+<div class="section" id="automesh-geometry">
+<h3>Automesh Geometry<a class="headerlink" href="#automesh-geometry" title="Permalink to this headline">¶</a></h3>
+<p>Advanced-Front-Automeshers for Quadrilaterals, Tetraeders or both of them are available in PrePostPy. Before the Connection is re-enabled in PrePostPy, we choose not to open Mentat again - instead the current instance of Mentat with the open Socket connection is used.</p>
+<p><strong>Hint:</strong> Never open more than one socket connection simultaneously!</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MConn</span><span class="o">.</span><span class="n">startmentat</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Automesh</span><span class="o">.</span><span class="n">Planar</span><span class="o">.</span><span class="n">AdvancedFront</span><span class="o">.</span><span class="n">quad_mesh</span><span class="p">([</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span><span class="p">],</span> <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;elements_1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/fig_automesh_3dview.png"><img alt="Model with Automeshed area between Curves `[F.items.C1,F.items.C2,F.items.C3]`" src="../_images/fig_automesh_3dview.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Model with Automeshed area between Curves <cite>[F.items.C1,F.items.C2,F.items.C3]</cite></span></p>
+</div>
+</div>
+<div class="section" id="operations-on-geometry-and-mesh">
+<h3>Operations on Geometry and Mesh<a class="headerlink" href="#operations-on-geometry-and-mesh" title="Permalink to this headline">¶</a></h3>
+<p>In this section the existing model objects are expanded in z-direction, mirrored normal to the x-axis. Finally a Sweep is performed.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Expand</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="s1">&#39;elements_1&#39;</span><span class="p">,</span>
+                               <span class="n">translations</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">4</span><span class="p">],</span>
+                               <span class="n">repetitions</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Symmetry</span><span class="o">.</span><span class="n">symmetry</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Sweep</span><span class="o">.</span><span class="n">sweep</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/fig_expand_half.png"><img alt="Model with mirrored elements alog the x-axis and expanded elements along the z-axis" src="../_images/fig_expand_half.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Model with mirrored elements alog the x-axis and expanded elements along the z-axis</span></p>
+</div>
+</div>
+<div class="section" id="select-nodes-and-add-them-to-an-existing-boundary-condition-symmetry-y">
+<h3>Select Nodes and add them to an existing Boundary Condition (Symmetry y)<a class="headerlink" href="#select-nodes-and-add-them-to-an-existing-boundary-condition-symmetry-y" title="Permalink to this headline">¶</a></h3>
+<p>All nodes at <cite>y=0</cite> are selected and added to the y-symmetry Boundary condition.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_zx</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">B3</span><span class="o">.</span><span class="n">add_nodes</span><span class="p">(</span><span class="s1">&#39;all_selected&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/fig_sym-y.png"><img alt="Boundary condition `Symmetry-y` with nodes at y=0" src="../_images/fig_sym-y.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Boundary condition <cite>Symmetry-y</cite> with nodes at y=0</span></p>
+</div>
+</div>
+<div class="section" id="rigid-body-elements-rbe2">
+<h3>Rigid-Body-Elements (RBE2)<a class="headerlink" href="#rigid-body-elements-rbe2" title="Permalink to this headline">¶</a></h3>
+<p>In this section Rigid-Body-Elements (RBE2) are added to the model. This is done by a selection of all nodes on the top and bottom surface of the model. The RBE2 control node is identified by the item in the PrePostPy’s File instance.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_xy</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2_bottom&#39;</span><span class="p">,</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;all_selected&#39;</span><span class="p">])</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">Box</span><span class="o">.</span><span class="n">select_xy</span><span class="p">(</span><span class="s1">&#39;Nodes&#39;</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">clear</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2_top&#39;</span><span class="p">,</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;all_selected&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id8">
+<a class="reference internal image-reference" href="../_images/fig_rbe2.png"><img alt="RBE2-Spiders on top and bottom surfaces of the model" src="../_images/fig_rbe2.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">RBE2-Spiders on top and bottom surfaces of the model</span></p>
+</div>
+</div>
+<div class="section" id="add-elements-to-an-existing-material-definition">
+<h3>Add Elements to an existing Material definition<a class="headerlink" href="#add-elements-to-an-existing-material-definition" title="Permalink to this headline">¶</a></h3>
+<p>All elements are now added to the Rubber material.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">M1</span><span class="o">.</span><span class="n">add_elements</span><span class="p">(</span><span class="s1">&#39;all_existing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="definition-of-element-types">
+<h3>Definition of Element Types<a class="headerlink" href="#definition-of-element-types" title="Permalink to this headline">¶</a></h3>
+<p>Assigments of Element Types is done through an existing instance of a Job. This is somewhat confusing but was taken from the original menu structure of Mentat. Although this step is highly recommended, it is not strictly necessary as Mentat automatically chooses a default Element Type.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="o">.</span><span class="n">set_element_type</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;all_existing&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="check-the-job-and-save-the-file">
+<h3>Check the Job and Save the File<a class="headerlink" href="#check-the-job-and-save-the-file" title="Permalink to this headline">¶</a></h3>
+<p>Finally a check of the Job is performed and the file is saved with name specified at the beginning of this example. Before activating the Mentat-Connection again we choose to quit Mentat after this last step.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MConn</span><span class="o">.</span><span class="n">quitmentat</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">savefile</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="job-submission">
+<h2>Job Submission<a class="headerlink" href="#job-submission" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt>PrePostPy supports two kinds of how Job submissions are handled:</dt>
+<dd><ul class="first last simple">
+<li>Submission through Mentat</li>
+<li><em>direct</em> submission to the Marc solver</li>
+</ul>
+</dd>
+</dl>
+<p>The latter one is the default and recommended way to handle Job submissions. The user-defined number of threads are passed for the Job submission (no DDM!) if more than one thread is required.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">F</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="p">,</span> <span class="n">threads</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id9">
+<a class="reference internal image-reference" href="../_images/fig_result_t2.png"><img alt="Contour Plot `Maximum Principal Value of Cauchy Stress` at Time `t=2`" src="../_images/fig_result_t2.png" style="width: 75%;" /></a>
+<p class="caption"><span class="caption-text">Contour Plot <cite>Maximum Principal Value of Cauchy Stress</cite> at Time <cite>t=2</cite></span></p>
+</div>
+</div>
+<div class="section" id="postprocess-results-with-history-plots">
+<h2>Postprocess Results with History Plots<a class="headerlink" href="#postprocess-results-with-history-plots" title="Permalink to this headline">¶</a></h2>
+<p>When the job has finished the force-displacement curves in x- and z-direction are shown as History Plots. In a first step, an instance of a PostFile class is generated. <strong>With</strong> this instance of a postfile, History Plots are added for the x- and z-directions. Optionally, these figures can be saved as PNG or PDF files. The data can be exported as a CSV table.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">PF1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">PostFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">job</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">J1</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">PF1</span> <span class="k">as</span> <span class="n">PFile</span><span class="p">:</span>
+
+    <span class="n">data</span><span class="p">,</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Displacement Z&#39;</span><span class="p">,</span>
+                                        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Reaction Force Z&#39;</span><span class="p">,</span>
+                                        <span class="n">increments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.pdf&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savedata</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">PF1</span> <span class="k">as</span> <span class="n">PFile</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">,</span><span class="n">fig</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Displacement X&#39;</span><span class="p">,</span>
+                                        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Reaction Force X&#39;</span><span class="p">,</span>
+                                        <span class="n">increments</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                        <span class="n">nodes</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                                        <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">reset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.pdf&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="n">PFile</span><span class="o">.</span><span class="n">HistoryPlot</span><span class="o">.</span><span class="n">savedata</span><span class="p">(</span><span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id10">
+<a class="reference internal image-reference" href="../_images/DisplacementZ-N2_ReactionForceZ-N1.png"><img alt="Force-Displacement Curve in z-Direction" src="../_images/DisplacementZ-N2_ReactionForceZ-N1.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Force-Displacement Curve in z-Direction</span></p>
+</div>
+<div class="figure align-center" id="id11">
+<a class="reference internal image-reference" href="../_images/DisplacementX-N2_ReactionForceX-N1.png"><img alt="Force-Displacement Curve in x-Direction" src="../_images/DisplacementX-N2_ReactionForceX-N1.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Force-Displacement Curve in x-Direction</span></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="install.html" title="Installation"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a>&#160;|</li>
+        <li><a href="#">Quickstart</a> &#187;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Andreas Dutzler.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>
