@@ -3,7 +3,7 @@ prepostpy
 
 High-level Scripting Interface for FEA Pre- and Postprocessing for MSC.Marc Mentat®
 
-Official Documentation: https://adtzlr.github.com/prepostpy
+Official Documentation: https://adtzlr.github.io/prepostpy
 
 
 License
