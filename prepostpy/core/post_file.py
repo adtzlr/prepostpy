@@ -127,6 +127,8 @@ class HistoryPlot:
         # if [n1,n2] then change to [n1,[n2]]
         if type(nodes[1]) == int:
             nodes = [nodes[0],[nodes[1]]]
+        if isinstance(nodes[1],Node):
+            nodes = [nodes[0],[nodes[1]]]
         self.nodes = nodes
         
         # select all increments if no increments are passed (=False)

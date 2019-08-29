@@ -54,12 +54,21 @@ class Curve:
         except:
             pass
         
+        mentat_command = ' '.join(['*apply_curve_divisions', 
+                                   str(self.mentat_id), ' #'])
+        
         try:
             curve_div = self.options['Divisions']
-            mentat_command = ' '.join(['*apply_curve_divisions', 
-                                       str(self.mentat_id), ' #'])
             pm.py_send('*set_curve_div_type_fix_ndiv')
             pm.py_send('*set_curve_div_num', str(curve_div))
+            pm.py_send(mentat_command)
+        except:
+            pass
+        
+        try:
+            target_length = self.options['Length']
+            pm.py_send('*set_curve_div_type_fix_avgl')
+            pm.py_send('*set_curve_div_avgl', str(target_length))
             pm.py_send(mentat_command)
         except:
             pass

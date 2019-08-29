@@ -1,0 +1,128 @@
+Example 101
+===========
+
+The following example demonstrates the selection of a user-defined number of neighbour nodes with PrePostPy. This is especially helpful for Rigid-Body-Elements. The selection of NextNodes is both shown as a separate command and directly within the definition of a Rigid-Body-Element.
+
+Create Geometry
+~~~~~~~~~~~~~~~
+In a first step all the necessary Points, Curves and Nodes are defined.
+
+.. code:: python
+
+    import prepostpy as pp
+
+    # init file
+    filename = r'C:\temp\model_101.mud'
+    F = pp.File(filename)
+
+    # create Points
+    F.item.P1 = pp.Point([0.0,0.2,0])
+    F.item.P2 = pp.Point([0.2,0.2,0])
+    F.item.P3 = pp.Point([0.2,0.3,0])
+    F.item.P4 = pp.Point([0.08,0.4,0])
+    F.item.P5 = pp.Point([0.08,0.85,0])
+    F.item.P6 = pp.Point([0.25,0.85,0])
+    F.item.P7 = pp.Point([0.25,1.0,0])
+    F.item.P8 = pp.Point([0.0,1.0,0])
+    
+    # create Nodes
+    F.item.N1 = pp.Node([0.0,0.0, 1.5],membership='external_displacement_1')
+    F.item.N2 = pp.Node([0.0,0.0,-1.5],membership='external_displacement_2')
+
+    # create Curves
+    target_length = 0.04
+    F.item.C1 = pp.Curve('Line',[F.item.P1,F.item.P2],Length=target_length)
+    F.item.C2 = pp.Curve('Line',[F.item.P2,F.item.P3],Length=target_length)
+    F.item.C3 = pp.Curve('Line',[F.item.P3,F.item.P4],Length=target_length)
+    F.item.C4 = pp.Curve('Line',[F.item.P4,F.item.P5],Length=target_length)
+    F.item.C5 = pp.Curve('Line',[F.item.P5,F.item.P6],Length=target_length)
+    F.item.C6 = pp.Curve('Line',[F.item.P6,F.item.P7],Length=target_length)
+    F.item.C7 = pp.Curve('Line',[F.item.P7,F.item.P8],Length=target_length)
+    F.item.C8 = pp.Curve('Line',[F.item.P8,F.item.P1],Length=target_length)
+    
+.. figure:: images/e101_geometry_basis.png
+   :width: 50%
+   :align: center
+   :alt: 2D Geometry
+   
+   2D Geometry
+
+Automesh 2D Geometry, Mirror Elements and Expand to 3D
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+With an active connection to Mentat, all Points, Curves and Nodes are sent to Mentat. The resulting 2D section area is automeshed with quadrilaterals. In a next stept the objects of the model are mirrored and rotated around the x-axis.
+
+.. code:: python
+
+    MConn = pp.MentatConnection(quitmentat=False,disconnect=False)
+
+    with MConn:
+        F.tomentat()
+        
+        F.Automesh.Planar.AdvancedFront.quad_mesh([F.item.C1,
+                                                   F.item.C2,
+                                                   F.item.C3,
+                                                   F.item.C4,
+                                                   F.item.C5,
+                                                   F.item.C6,
+                                                   F.item.C7,
+                                                   F.item.C8],
+                                                   membership='elem_section')
+                                                   
+        F.Operations.Symmetry.symmetry(point=[0,0,0],normal=[1,0,0])
+        F.Operations.Sweep.sweep()
+        
+        F.Operations.Expand.expand('elements_section',
+                                   rotation_angles=[-3,0,0],
+                                   repetitions=120)
+        F.Operations.Sweep.sweep()
+        
+
+.. figure:: images/e101_geometry.png
+   :width: 50%
+   :align: center
+   :alt: 2D Geometry sent to Mentat (with Curve Divisions)
+   
+   2D Geometry sent to Mentat (with Curve Divisions)
+
+Link next 12 Nodes to Node 1 (`F.item.N1`) with an RBE2-Element
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Node 1 is linked to the next 12 Nodes with an RBE2-Element. All Degrees of Freedom are locked (`dof=[1,1,1,1,1,1]`). The optional argument`extend=True` checks if further Nodes are in equal distance. If such additional Nodes exist, these are added to the RBE2-Nodes in order to maintain a symmetric connection to the Mesh. Only Nodes on the mesh surface are to be considered.
+
+.. code:: python
+
+    MConn.startmentat = False
+    with MConn:
+        F.Links.RBE2.new(label='RBE2-zpos', 
+                         node=F.item.N1, 
+                         tied_nodes=['next', 12, {'extend': True}], 
+                         dof=[1,1,1,1,1,1])
+                         
+.. figure:: images/e101_rbe2-zpos.png
+   :width: 50%
+   :align: center
+   :alt: Automeshed 3D-Model with RBE2 on the top side of the model
+   
+   Automeshed 3D-Model with RBE2 on the top side of the model
+   
+Select next 12 Nodes to Node 2 (`F.item.N2`) and use them as tied nodes of an RBE2-Element
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The above method combined two steps into one: First, the neighbour Nodes of Node 1 were selected and added to the RBE2 Element. This may also be splitted into two separate commands. For demonstration purposes this is shown with Node 2 on the other side of the z-direction. To consider only Nodes on the mesh surface, the argument `only='Surface'` has to be passed to the Selection. Again, the optional argument `extend=True` checks if further Nodes are in equal distance.
+
+.. code:: python
+
+    with MConn:
+    
+        F.Select.NextNodes.select(F.item.N2.coordinates,nnodes=12,
+                                  extend=True,only='Surface')
+                                  
+        F.Links.RBE2.new(label='RBE2-zneg', 
+                         node=F.item.N2, 
+                         tied_nodes=['all_selected'], 
+                         dof=[1,1,1,1,1,1])
+                         
+.. figure:: images/e101_rbe2-zneg.png
+   :width: 50%
+   :align: center
+   :alt: Automeshed 3D-Model with RBE2 on the bottom side of the model
+   
+   Automeshed 3D-Model with RBE2 on the bottom side of the model

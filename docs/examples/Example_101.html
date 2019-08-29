@@ -1,0 +1,254 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example 101 &#8212; PrePostPy 2019.09.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinx13.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Getting Started" href="../usage/getting_started.html" />
+    <link rel="canonical" href="http://www.sphinx-doc.org/en/master/examples/example_101.html" />
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700'
+          rel='stylesheet' type='text/css' />
+ 
+    <style type="text/css">
+      table.right { float: right; margin-left: 20px; }
+      table.right td { border: 1px solid #ccc; }
+      
+    </style>
+    <script type="text/javascript">
+      // intelligent scrolling of the sidebar content
+      $(window).scroll(function() {
+        var sb = $('.sphinxsidebarwrapper');
+        var win = $(window);
+        var sbh = sb.height();
+        var offset = $('.sphinxsidebar').position()['top'];
+        var wintop = win.scrollTop();
+        var winbot = wintop + win.innerHeight();
+        var curtop = sb.position()['top'];
+        var curbot = curtop + sbh;
+        // does sidebar fit in window?
+        if (sbh < win.innerHeight()) {
+          // yes: easy case -- always keep at the top
+          sb.css('top', $u.min([$u.max([0, wintop - offset - 10]),
+                                $(document).height() - sbh - 200]));
+        } else {
+          // no: only scroll if top/bottom edge of sidebar is at
+          // top/bottom edge of window
+          if (curtop > wintop && curbot > winbot) {
+            sb.css('top', $u.max([wintop - offset - 10, 0]));
+          } else if (curtop < wintop && curbot < winbot) {
+            sb.css('top', $u.min([winbot - sbh - offset - 20,
+                                  $(document).height() - sbh - 200]));
+          }
+        }
+      });
+    </script>
+
+  </head><body>
+<div class="pageheader">
+    <div >
+        <a href="https://github.com/adtzlr/prepostpy"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_red_aa0000.png" alt="Fork me on GitHub"></a>
+    </div>
+  <ul>
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../usage/install.html">Get it</a></li>
+    <li><a href="../usage/getting_started.html">Quickstart</a></li>
+    <!-- <li><a href="../theory/theory.html">Theory Guide</a></li> -->
+  </ul>
+  <div>
+    <a href="../index.html">
+      <img src="../_static/sphinxheader.png" alt="TRUSSPY" />
+    </a>
+  </div>
+</div>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../usage/getting_started.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Home</a>&#160;|</li>
+        <li><a href="../usage/getting_started.html">Quickstart</a> &#187;</li>
+ 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../usage/getting_started.html"
+                        title="previous chapter">Getting Started</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="example-101">
+<h1>Example 101<a class="headerlink" href="#example-101" title="Permalink to this headline">¶</a></h1>
+<p>The following example demonstrates the selection of a user-defined number of neighbour nodes with PrePostPy. This is especially helpful for Rigid-Body-Elements. The selection of NextNodes is both shown as a separate command and directly within the definition of a Rigid-Body-Element.</p>
+<div class="section" id="create-geometry">
+<h2>Create Geometry<a class="headerlink" href="#create-geometry" title="Permalink to this headline">¶</a></h2>
+<p>In a first step all the necessary Points, Curves and Nodes are defined.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">prepostpy</span> <span class="k">as</span> <span class="nn">pp</span>
+
+<span class="c1"># init file</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\temp\model_101.mud&#39;</span>
+<span class="n">F</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+<span class="c1"># create Points</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.2</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span><span class="mf">0.3</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P4</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P5</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.08</span><span class="p">,</span><span class="mf">0.85</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P6</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.85</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P7</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P8</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Point</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># create Nodes</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span><span class="n">membership</span><span class="o">=</span><span class="s1">&#39;external_displacement_1&#39;</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Node</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="o">-</span><span class="mf">1.5</span><span class="p">],</span><span class="n">membership</span><span class="o">=</span><span class="s1">&#39;external_displacement_2&#39;</span><span class="p">)</span>
+
+<span class="c1"># create Curves</span>
+<span class="n">target_length</span> <span class="o">=</span> <span class="mf">0.04</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P2</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P3</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P4</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C4</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P4</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P5</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C5</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P5</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P6</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C6</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P6</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P7</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C7</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P7</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P8</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+<span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C8</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">Curve</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">,[</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P8</span><span class="p">,</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">P1</span><span class="p">],</span><span class="n">Length</span><span class="o">=</span><span class="n">target_length</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/e101_geometry_basis.png"><img alt="2D Geometry" src="../_images/e101_geometry_basis.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">2D Geometry</span></p>
+</div>
+</div>
+<div class="section" id="automesh-2d-geometry-mirror-elements-and-expand-to-3d">
+<h2>Automesh 2D Geometry, Mirror Elements and Expand to 3D<a class="headerlink" href="#automesh-2d-geometry-mirror-elements-and-expand-to-3d" title="Permalink to this headline">¶</a></h2>
+<p>With an active connection to Mentat, all Points, Curves and Nodes are sent to Mentat. The resulting 2D section area is automeshed with quadrilaterals. In a next stept the objects of the model are mirrored and rotated around the x-axis.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MConn</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">MentatConnection</span><span class="p">(</span><span class="n">quitmentat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">disconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">tomentat</span><span class="p">()</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Automesh</span><span class="o">.</span><span class="n">Planar</span><span class="o">.</span><span class="n">AdvancedFront</span><span class="o">.</span><span class="n">quad_mesh</span><span class="p">([</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C1</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C2</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C3</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C4</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C5</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C6</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C7</span><span class="p">,</span>
+                                               <span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">C8</span><span class="p">],</span>
+                                               <span class="n">membership</span><span class="o">=</span><span class="s1">&#39;elem_section&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Symmetry</span><span class="o">.</span><span class="n">symmetry</span><span class="p">(</span><span class="n">point</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">normal</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Sweep</span><span class="o">.</span><span class="n">sweep</span><span class="p">()</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Expand</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="s1">&#39;elements_section&#39;</span><span class="p">,</span>
+                               <span class="n">rotation_angles</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+                               <span class="n">repetitions</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Operations</span><span class="o">.</span><span class="n">Sweep</span><span class="o">.</span><span class="n">sweep</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/e101_geometry.png"><img alt="2D Geometry sent to Mentat (with Curve Divisions)" src="../_images/e101_geometry.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">2D Geometry sent to Mentat (with Curve Divisions)</span></p>
+</div>
+</div>
+<div class="section" id="link-next-12-nodes-to-node-1-f-item-n1-with-an-rbe2-element">
+<h2>Link next 12 Nodes to Node 1 (<cite>F.item.N1</cite>) with an RBE2-Element<a class="headerlink" href="#link-next-12-nodes-to-node-1-f-item-n1-with-an-rbe2-element" title="Permalink to this headline">¶</a></h2>
+<p>Node 1 is linked to the next 12 Nodes with an RBE2-Element. All Degrees of Freedom are locked (<cite>dof=[1,1,1,1,1,1]</cite>). The optional argument`extend=True` checks if further Nodes are in equal distance. If such additional Nodes exist, these are added to the RBE2-Nodes in order to maintain a symmetric connection to the Mesh. Only Nodes on the mesh surface are to be considered.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MConn</span><span class="o">.</span><span class="n">startmentat</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2-zpos&#39;</span><span class="p">,</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N1</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;next&#39;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;extend&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}],</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/e101_rbe2-zpos.png"><img alt="Automeshed 3D-Model with RBE2 on the top side of the model" src="../_images/e101_rbe2-zpos.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Automeshed 3D-Model with RBE2 on the top side of the model</span></p>
+</div>
+</div>
+<div class="section" id="select-next-12-nodes-to-node-2-f-item-n2-and-use-them-as-tied-nodes-of-an-rbe2-element">
+<h2>Select next 12 Nodes to Node 2 (<cite>F.item.N2</cite>) and use them as tied nodes of an RBE2-Element<a class="headerlink" href="#select-next-12-nodes-to-node-2-f-item-n2-and-use-them-as-tied-nodes-of-an-rbe2-element" title="Permalink to this headline">¶</a></h2>
+<p>The above method combined two steps into one: First, the neighbour Nodes of Node 1 were selected and added to the RBE2 Element. This may also be splitted into two separate commands. For demonstration purposes this is shown with Node 2 on the other side of the z-direction. To consider only Nodes on the mesh surface, the argument <cite>only=’Surface’</cite> has to be passed to the Selection. Again, the optional argument <cite>extend=True</cite> checks if further Nodes are in equal distance.</p>
+<div class="code python highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">MConn</span><span class="p">:</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Select</span><span class="o">.</span><span class="n">NextNodes</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span><span class="o">.</span><span class="n">coordinates</span><span class="p">,</span><span class="n">nnodes</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                              <span class="n">extend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">only</span><span class="o">=</span><span class="s1">&#39;Surface&#39;</span><span class="p">)</span>
+
+    <span class="n">F</span><span class="o">.</span><span class="n">Links</span><span class="o">.</span><span class="n">RBE2</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;RBE2-zneg&#39;</span><span class="p">,</span>
+                     <span class="n">node</span><span class="o">=</span><span class="n">F</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">N2</span><span class="p">,</span>
+                     <span class="n">tied_nodes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;all_selected&#39;</span><span class="p">],</span>
+                     <span class="n">dof</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/e101_rbe2-zneg.png"><img alt="Automeshed 3D-Model with RBE2 on the bottom side of the model" src="../_images/e101_rbe2-zneg.png" style="width: 50%;" /></a>
+<p class="caption"><span class="caption-text">Automeshed 3D-Model with RBE2 on the bottom side of the model</span></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../usage/getting_started.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="../index.html">Home</a>&#160;|</li>
+        <li><a href="../usage/getting_started.html">Quickstart</a> &#187;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Andreas Dutzler.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>
